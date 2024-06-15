@@ -1,3 +1,7 @@
+**Tabla de Contenido**
+1. [Limpìeza de Datos ]
+2. 
+
 Proyecto de Portafolio de Inversión en Acciones
 Descripción
 Este proyecto de portafolio de inversión en acciones se centra en el análisis y la visualización de datos relacionados con el rendimiento histórico de acciones de empresas públicas. Utilizando herramientas de análisis de datos y programación en Python, se exploran diversas métricas financieras y técnicas para evaluar la rentabilidad y la volatilidad de las acciones seleccionadas.
@@ -12,7 +16,7 @@ Visualización Interactiva: Crear gráficos interactivos que permitan a los usua
 Automatización y Actualización: Diseñar un sistema que actualice automáticamente los datos y métricas de las acciones seleccionadas para mantener el portafolio actualizado.
 De lo cual se realizaron 5 proyectos en RStudio para analizar y determinar:
 
-1.	Limpieza
+##1.	Limpieza
 ¿Cuáles son algunos métodos efectivos para manejar valores faltantes en el conjunto de datos que se ha utilizado?
 2.	Análisis
 Utilizando R Describiremos como se puede explorar la distribución de una variable numérica en un conjunto de datos. 
