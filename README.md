@@ -1,6 +1,6 @@
 **Tabla de Contenido**
 1. [Limpìeza de Datos ](https://github.com/MarioOva/Portafolios-de-Proyectos-en-R/blob/main/README.md#1limpieza)
-2. [Análisis de Datos]
+2. [Análisis de Datos](https://github.com/MarioOva/Portafolios-de-Proyectos-en-R/blob/main/README.md#2an%C3%A1lisis)
 3. [Visualización de Datos ]
 4. [Ciencia de Datos ]
 5. [WebScrapping ]
