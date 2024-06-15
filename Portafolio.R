@@ -55,5 +55,28 @@ quantile(myData9$AMZN, 0.75) - quantile(myData9$AMZN, 0.25)
 #Para calcular la desviación mediana absoluta utilizamos la función:
 mean(abs(myData9$AMZN-mean (myData9$AMZN)))
 
+#Para obtener la varianza y la desviación estándar muestrales utilizamos la función:
+var(myData9$AMZN)
+sd(myData9$AMZN)
+
+#Para calcular el coeficiente de correlación entre las variables AMZN y TSLA se debe utilizar la función:
+cor(myData9)
+
+#Para diagramas de caja utilizando nuestra información, esta en la función:
+boxplot(myData9$AMZN, myData9$TSLA, main= "Boxplots for AMZN and TSLA" , xlab="Annual Returnos, 2019-2024 (in percent)", names=c("AMZN","TSLA"), horizontal = TRUE, col="gold")
+
+#Para tartar los valores atìpicos de las 2 variables que estamos trabajando, las funciones son las siguientes
+outliersAMZN <- boxplot(myData9$AMZN)$out; outliersAMZN
+outliersTSLA <- boxplot(myData9$TSLA)$out; outliersTSLA
+
+#Para tratar los valores atípicos utilizamos esta función:
+myData9$newAMZN <- ifelse(myData9$AMZN %in% outliersAMZN, NA, myData9$AMZN)
+
+#Al haber reemplazado el valor atípico podemos de nuevo ejecutar la función de summary:
+summary(myData9)
+
+
+
+
 
 
