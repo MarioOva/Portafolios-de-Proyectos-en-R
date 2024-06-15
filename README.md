@@ -1,6 +1,6 @@
 **Tabla de Contenido**
 1. [Limpìeza de Datos ](https://github.com/MarioOva/Portafolios-de-Proyectos-en-R/blob/main/README.md#1limpieza)
-2. ([Análisis de Datos]
+2. [Análisis de Datos]
 
 Proyecto de Portafolio de Inversión en Acciones
 Descripción
