@@ -172,8 +172,82 @@ ggplot(myData_ultimos_6_meses, aes(x = Fecha, y = Close META)) +
 #indica una alta variabilidad en los precios de las acciones. Si están más 
 #cerca de la línea, la variabilidad es menor.
 
+#Para realizar la lectura de una página web se debe realizar los siguientes pasos:
+#Primero, instalamos y cargamos las librerías necesarias.
+# Instalar las librerías necesarias
+install.packages("rvest")
+install.packages("dplyr")
+install.packages("stringr")
+install.packages("tidyverse")
+# Cargar las librerías
+library(rvest)
+library(dplyr)
+library(stringr)
+library(tidyverse)
 
+#Segundo
+# Leer la página web
+url <- 'https://en.wikipedia.org/wiki/R_(programming_language)'
+webpage <- read_html(url) 
 
+#Tercero
+# Extraer el primer párrafo
+first_paragraph <- webpage %>%
+  html_node('p') %>%
+  html_text()
+# Mostrar el primer párrafo
+print(first_paragraph) 
 
+#Identificamos la tabla usando el selector adecuado y la convertimos en un dataframe. 
+# Extraer la tabla de información (infobox)
+infobox <- webpage %>%
+  html_node('.infobox') %>%
+  html_table()
+# Mostrar la tabla de información
+print(infobox) 
 
+#Cuarto
+# Limpiar el primer párrafo
+first_paragraph_clean <- str_trim(first_paragraph)
+# Mostrar el párrafo limpio
+print(first_paragraph_clean) 
+
+#A veces, las tablas pueden necesitar más limpieza. Podemos usar funciones de dplyr para
+#renombrar columnas, filtrar filas, etc. 
+# Limpiar y estructurar la tabla de información
+infobox_clean <- infobox %>%
+  rename(Attribute = 1, Value = 2) %>%
+  filter(!is.na(Attribute))
+# Mostrar la tabla de información limpia
+print(infobox_clean) 
+
+#Quinto paso
+# Agregar una columna ficticia de datos numéricos para el análisis
+set.seed(123) # Para reproducibilidad
+infobox_clean$NumericValue <- sample(1:100, nrow(infobox_clean), replace
+                                     = TRUE)
+# Mostrar la tabla con la nueva columna
+print(infobox_clean) 
+
+#Utilizaremos summarise() de dplyr para calcular medidas como la media, mediana,
+#desviación estándar, etc. 
+# Calcular medidas de resumen estadístico
+summary_stats <- infobox_clean %>%
+  summarise(
+    Mean = mean(NumericValue),
+    Median = median(NumericValue),
+    SD = sd(NumericValue),
+    Min = min(NumericValue),
+    Max = max(NumericValue)
+  )
+# Mostrar las medidas de resumen estadístico
+print(summary_stats) 
+
+#Sexto paso
+# Guardar el primer párrafo en un archivo de texto
+writeLines(first_paragraph_clean, 'primer_parrafo.txt')
+# Guardar la tabla de información en un archivo CSV
+write.csv(infobox_clean, 'infobox_R.csv', row.names = FALSE)
+# Guardar las medidas de resumen estadístico en un archivo CSV
+write.csv(summary_stats, 'summary_stats.csv', row.names = FALSE)
 
