@@ -75,6 +75,103 @@ myData9$newAMZN <- ifelse(myData9$AMZN %in% outliersAMZN, NA, myData9$AMZN)
 #Al haber reemplazado el valor atípico podemos de nuevo ejecutar la función de summary:
 summary(myData9)
 
+#VISUALIZACIÓN DE DATOS
+#La siguiente base de datos fue cargada a RStudio para poder realizar un 
+#análisis y visualización de la data de precio de acciones. 
+#De la cual se necesita conocer el comportamiento de las acciones en los
+#últimos 6 meses.
+library(readxl)
+myData <- read_excel
+myData
+#Se procedió a determinar cuál es la fecha más reciente y la fecha de 6 meses 
+#atrás con los siguientes códigos:
+fecha_mas_reciente <- max(myData$Fecha)
+fecha_6_meses_atras <- fecha_mas_reciente - months(6)
+#Para poder graficar el comportamiento de las acciones es necesario instalar
+#los siguientes paquetes:
+install.packages("ggplot2") 
+install.packages("dplyr")
+#Se Cargan las bibliotecas necesarias:
+library(ggplot2) 
+library(dplyr)
+#Creamos un gráfico utilizando ggplot2 donde cada línea representa el precio 
+#de cierre de una acción (Close TSLA, Close AMZN, etc.) en función de la fecha.
+#Utilizamos dplyr para encontrar las fechas con los valores máximos de cada 
+#acción en el período de los últimos 6 meses. Esto nos dará las fechas en las 
+#que cada acción alcanzó su pico más alto.
+# Graficar el comportamiento de las acciones en los últimos 6 meses
+ggplot(myData_ultimos_6_meses, aes(x = Fecha)) +
+  +     geom_line(aes(y = Close TSLA), color = "blue", linetype = "solid") +
+  +     geom_line(aes(y = Close AMZN), color = "red", linetype = "dashed") +
+  +     geom_line(aes(y = Close PARA), color = "green", linetype = "dotted") +
+  +     geom_line(aes(y = Close META), color = "purple", linetype = "dotdash") +
+  +     # Agrega más geom_line() para otras acciones si es necesario
+  +     labs(title = "Comportamiento de Acciones en los Últimos 6 Meses",
+             +          x = "Fecha", y = "Precio de Cierre") +
+  +     theme_minimal()
+#En este Código se puede observer que se graficaron las principals acciones 
+#siendo estas Tesla (color azul), Aamazon (color rojo), Paramount (color verde) 
+#y Meta (color Morado), con una gráfica de líneas donde muestra en el eje X la 
+#Fecha y en el eje Y el precio de cierre
+#Del anterior gráfico se puede visualizar cómo Meta ha mantenido los mejores 
+#precios de cierre de acciones, seguido de Tesla, Amazone y por último Paramount
+#Como siguiente paso deseamos determinar los porcentajes por acción:
+fecha_mas_reciente <- max(myData$Fecha)
+fecha_6_meses_atras <- fecha_mas_reciente - months(6)
+myData_ultimos_6_meses <- myData %>% filter(Fecha >= fecha_6_meses_atras)
+precio_inicial <- sapply(myData_ultimos_6_meses[, -1], function(x) head(x, 1))
+precio_actual <- sapply(myData_ultimos_6_meses[, -1], function(x) tail(x, 1))
+porcentaje_cambio <- (precio_actual - precio_inicial) / precio_inicial * 100
+resultado <- data.frame(Accion = names(porcentaje_cambio),
+                        Porcentaje_Cambio = porcentaje_cambio)
+resultado <- resultado %>% arrange(desc(Porcentaje_Cambio))
+print(resultado)
+#Ahora se creará la gráfica de estos datos con el siguiente código:
+ggplot(resultado, aes(x = Accion, y = Porcentaje_Cambio)) +
+  +     geom_bar(stat = "identity", fill = "skyblue") +
+  +     labs(title = "Rendimiento en Términos Porcentuales de Acciones",
+             +          x = "Acción", y = "Porcentaje de Cambio") +
+  +     theme_minimal() +
+  +     theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  +     geom_text(aes(label = sprintf("%.2f", Porcentaje_Cambio)), vjust 
+                  = -0.3, size = 3)
+#Esta gráfica indica que la acción con mayor rendimiento son las acciones de 
+#Meta y las que tinen un menor rendimiento son las de Tesla. 
+#CIENCIA DE DATOS
+#se realiza una regresión lineal de la data anteriormente vista.
+#Usamos la función lm() para crear un modelo de regresión lineal donde
+#Close META es la variable dependiente y Fecha es la variable independiente.
+#summary(modelo_META) proporciona un resumen del modelo de regresión, 
+#que incluye los coeficientes, el valor de R-squared, y los p-valores para 
+#evaluar la significancia estadística.
+#Utilizamos ggplot2 para crear una gráfica que muestra los datos reales de 
+#los precios de cierre de Meta como puntos (geom_point()) y la línea de 
+#regresión ajustada (geom_smooth(method = "lm", se = FALSE)).
+library(readxl)
+library(dplyr)
+myData <- read_excel
+myData$Fecha <- as.Date(myData$Fecha, format = "%Y-%m-%d")
+fecha_mas_reciente <- max(myData$Fecha)
+fecha_6_meses_atras <- fecha_mas_reciente - months(6)
+myData_ultimos_6_meses <- myData %>% filter(Fecha >= fecha_6_meses_atras)
+modelo_META <- lm(Close META ~ Fecha, data = myData_ultimos_6_meses)
+summary(modelo_META)
+library(ggplot2)
+ggplot(myData_ultimos_6_meses, aes(x = Fecha, y = Close META)) +
+  geom_point(color = "blue") +  # Puntos de datos reales
+  geom_smooth(method = "lm", se = FALSE, color = "red") +  # Línea de regresión
+  labs(title = "Regresión Lineal del Precio de Cierre de Meta (META)",
+       x = "Fecha", y = "Precio de Cierre (USD)") +
+  theme_minimal()
+#La línea de regresión te ayuda a visualizar la tendencia general del precio 
+#de las acciones de Meta durante los últimos 6 meses. Si la línea tiene una 
+#pendiente positiva, indica que el precio ha estado aumentando. Si tiene una 
+#pendiente negativa, el precio ha estado disminuyendo.
+#La dispersión de los puntos alrededor de la línea de regresión muestra la 
+#variabilidad del precio de cierre. Si los puntos están muy dispersos, esto 
+#indica una alta variabilidad en los precios de las acciones. Si están más 
+#cerca de la línea, la variabilidad es menor.
+
 
 
 
